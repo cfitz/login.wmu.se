@@ -5,7 +5,7 @@ set :application, 'login.wmu.se'
 set :repo_url, 'https://github.com/cfitz/login.wmu.se.git'     
 set :use_sudo, false     
 set :user, "library"
-
+set :deploy_to, '/home/library/login.wmu.se'
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
@@ -37,15 +37,24 @@ set :user, "library"
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
+set :unicorn_conf, "#{deploy_to}/current/config/unicorn.rb"
+set :unicorn_pid, "#{deploy_to}/shared/pids/unicorn.pid"
+
+
+# Unicorn control tasks
 namespace :deploy do
 
-  after :restart, :clear_cache do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
-      # Here we can do anything such as:
-      # within release_path do
-      #   execute :rake, 'cache:clear'
-      # end
-    end
+  task :restart do
+     run "if [ -f #{unicorn_pid} ]; then kill -USR2 `cat #{unicorn_pid}`; else cd #{deploy_to}/current && bundle exec unicorn -c #{unicorn_conf} -E #{rails_env} -D; fi"
+  end
+
+  task :start do
+      run "cd #{deploy_to}/current && bundle exec unicorn -c #{unicorn_conf} -E #{rails_env} -D"
+  end
+
+  task :stop do
+     run "if [ -f #{unicorn_pid} ]; then kill -QUIT `cat #{unicorn_pid}`; fi"
   end
 
 end
+
