@@ -37,7 +37,7 @@ set :deploy_to, '/home/library/login.wmu.se'
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
-set :unicorn_conf, "#{deploy_to}/current/config/unicorn.rb"
+set :unicorn_conf, "#{deploy_to}/current/unicorn.rb"
 set :unicorn_pid, "#{deploy_to}/shared/pids/unicorn.pid"
 
 
