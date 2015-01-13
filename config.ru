@@ -13,7 +13,7 @@ require 'digest'
 #
 # If you do have issues with certs in production code, this could help:
 # http://railsapps.github.io/openssl-certificate-verify-failed.html
-OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
+#OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
 class App < Sinatra::Base
   get '/' do
@@ -45,10 +45,6 @@ class App < Sinatra::Base
     redirect to(url)
   end
   
-  get '/oauth2callback' do
-    content_type 'text/plain'
-    request.env['omniauth.auth'].to_hash.inspect rescue "No Data"
-  end
 
   get '/auth/failure' do
     content_type 'text/plain'
