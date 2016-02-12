@@ -31,11 +31,13 @@ class App < Sinatra::Base
   end
 
   get '/auth/:provider/callback' do
-    email = request.env['omniauth.auth'].info.email rescue "No Data"
+  
+    email = request.env['omniauth.auth'].info.email rescue "No email was provided. Please try again."
     
-    unless /^[a-zA-Z]+@wmu\.se$/.match email 
-      halt "You must login with a current WMU email address"
-    end
+    
+   unless /^[a-zA-Z]+@wmu\.se$/.match email
+      halt  403, "You must login with a current WMU email address. You used #{email}"
+   end
     
     key = ENV["EZPROXY_KEY"]
     packet = "$u#{Time.now.to_i}$e"
