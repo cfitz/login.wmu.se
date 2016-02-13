@@ -35,7 +35,7 @@ class App < Sinatra::Base
     email = request.env['omniauth.auth'].info.email rescue "No email was provided. Please try again."
     
     
-   unless /^[a-zA-Z]+@wmu\.se$/.match email
+   unless email.include?("@wmu.se")
       halt  403, "You must login with a current WMU email address. You used #{email}"
    end
     
