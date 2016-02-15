@@ -36,7 +36,7 @@ class App < Sinatra::Base
     
     
    unless email.include?("@wmu.se")
-      halt  403, "You must login with a current WMU email address. You used #{email}"
+      halt  403, "You must login with a current WMU email address. You used #{email}.\n\n #{request.env['omniauth.auth'].to_hash.inspect}"
    end
     
     key = ENV["EZPROXY_KEY"]
